@@ -1,7 +1,8 @@
-let jwt = require('jsonwebtoken')
+let jwt = require('jsonwebtoken');
+require('dotenv').config(); 
 
 module.exports = {
-    tokenSign: 'DEVELOPMENT_TOKEN_SECRET',
+    tokenSign: process.env.DEVELOPMENT_TOKEN,
     generateToken: function (user) {
         return jwt.sign({
                 userId: user.id,

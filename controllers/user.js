@@ -10,7 +10,6 @@ exports.signup = (req, res) => {
     let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
-    let bio = req.body.bio;
 
     if (email == null || username == null || password == null) {
         res.status(400).json({
@@ -19,15 +18,11 @@ exports.signup = (req, res) => {
     }
 
     //TO DO => Vérification des saisies user
-    let emailOk = verifInput.validEmail(email);
-    console.log(emailOk)
-    let mdpOK = verifInput.validPassword(password);
-    console.log(mdpOK)
-    let usernameOk = verifInput.validUsername(username);
-    console.log(usernameOk)
-    if (emailOk == true && mdpOK == true && usernameOk == true) {
+    let emailValid = verifInput.validEmail(email);
+    let mdpValid = verifInput.validPassword(password);
+    let usernameValid = verifInput.validUsername(username);
+    if (emailValid == true && mdpValid == true && usernameValid == true) {
         //Vérification si user n'existe pas déjà
-        //TO DO => Vérifier l'username et l'email
         models.User.findOne({
                 attributes: ['email'],
                 where: {
@@ -42,13 +37,13 @@ exports.signup = (req, res) => {
                                 email: email,
                                 username: username,
                                 password: bcryptPassword,
-                                bio: bio,
                                 isAdmin: false
                             })
                             .then(newUser => {
                                 res.status(201).json({
                                     'id': newUser.id
                                 })
+                                console.log(newUser);
                             })
                             .catch(err => {
                                 res.status(500).json({
@@ -68,16 +63,19 @@ exports.signup = (req, res) => {
                 })
             })
     } else {
-        console.log('pas cette fois')
+        res.status(403).json({
+            error: 'Identifiant non valide'
+        });
     }
 };
 
 //Login d'un user
 exports.login = (req, res) => {
     //Récupération et validation des paramètres
+    let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
-    if (username == null || password == null) {
+    if ((email == null) || (username == null) || (password == null)) {
         res.status(400).json({
             error: 'Il manque un paramètre'
         })
@@ -85,21 +83,21 @@ exports.login = (req, res) => {
     //Vérification si user existe
     models.User.findOne({
             where: {
-                username: username
+                email: email
             }
         })
-        .then(user => {
-            if (user) {
-                bcrypt.compare(password, user.password, (errComparePassword, resComparePassword) => {
+        .then(userFound => {
+            if (userFound) {
+                bcrypt.compare(password, userFound.password, (errComparePassword, resComparePassword) => {
                     if (resComparePassword) {
                         res.status(200).json({
-                            userId: user.id,
-                            token: utils.generateToken(user),
-                            isAdmin: user.isAdmin
+                            userId: userFound.id,
+                            token: utils.generateToken(userFound),
+                            isAdmin: userFound.isAdmin
                         })
                     } else {
                         res.status(403).json({
-                            error: 'invalid password'
+                            error: 'Mot de passe incorrect'
                         });
                     };
                 })
@@ -119,12 +117,13 @@ exports.login = (req, res) => {
 
 
 //Profil d'un user
-exports.userProfil = (req, res) => {
-    let id = utils.getUserId(req.headers.authorization)
+exports.userProfile = (req, res) => {
+    const headerAuth = req.headers['authorization'];
+    const userId = utils.getUserId(headerAuth);
     models.User.findOne({
-            attributes: ['id', 'email', 'username', 'bio', 'isAdmin'],
+            attributes: ['id', 'email', 'username', 'bio', 'imageProfil', 'isAdmin'],
             where: {
-                id: id
+                id: userId
             }
         })
         .then(user => res.status(200).json(user))
@@ -132,23 +131,21 @@ exports.userProfil = (req, res) => {
 };
 
 //modification d'un profil
-exports.changePwd = (req, res) => {
+exports.editPwd = (req, res) => {
     //TO DO:
     //Récupère l'id de l'user et le nouveau password
-    let userId = utils.getUserId(req.headers.authorization);
+    const headerAuth = req.headers['authorization'];
+    const userId = utils.getUserId(headerAuth);
     const newPassword = req.body.newPassword;
-    console.log(newPassword)
-    //Vérification regex du nouveau mot de passe
-    console.log('admin', verifInput.validPassword(newPassword))
+
     if (verifInput.validPassword(newPassword)) {
-        //Vérifie qu'il est différent de l'ancien
         models.User.findOne({
                 where: {
                     id: userId
                 }
             })
             .then(user => {
-                console.log('user trouvé', user)
+                console.log('utilisateur trouvé', user)
                 bcrypt.compare(newPassword, user.password, (errComparePassword, resComparePassword) => {
                     //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
                     if (resComparePassword) {
@@ -180,47 +177,63 @@ exports.changePwd = (req, res) => {
     }
 };
 
-exports.editUserProfil = (req, res) => {
+exports.editUserProfile = (req, res) => {
     const headerAuth = req.headers['authorization'];
     const userId = utils.getUserId(headerAuth);
-    
-    // Params
-    const bio = req.body.bio;
+    let bio = req.body.bio;
+    let imageProfil = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
 
-    models.User.findOne({
-        attributes: ['id', 'bio'],
-        where: { id: userId }
-    })
-    .then(userFound => {
-        if (userFound) {
-            userFound.update({ bio: (bio ? bio : userFound.bio) });
-            return res.status(201).json(userFound);
-        } else {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
-        } 
-    })
-    .catch(error => res.status(500).json({ error: 'Impossible de mettre à jour le profil utilisateur' }));
-};
+    if (userId != null) {
+        models.User.findOne({
+                attributes: ['id', 'bio', 'imageProfil'],
+                where: {
+                    id: userId
+                }
+            })
+            .then(userFound => {
+                if (userFound) {
+                    userFound.update({
+                        bio: (bio ? bio : userFound.bio)
+                    });
+                    userFound.update({
+                        imageProfil: (imageProfil ? imageProfil : userFound.imageProfil)
+                    });
+                    return res.status(201).json(userFound);
+                } else {
+                    return res.status(404).json({
+                        error: 'Utilisateur non trouvé'
+                    });
+                }
+            })
+            .catch(error => res.status(500).json({
+                error: 'Impossible de mettre à jour le profil utilisateur'
+            }));
+    } else {
+        res.status(500).json({
+            error: 'Impossible de modifier le profil utilisateur'
+        })
+    }
+}
 
 
 //Suppression d'un compte
 exports.deleteProfile = (req, res) => {
-    //récupération de l'id de l'user
-    let userId = utils.getUserId(req.headers.authorization);
+
+    const headerAuth = req.headers['authorization'];
+    const userId = utils.getUserId(headerAuth);
     if (userId != null) {
-        //Recherche sécurité si user existe bien
         models.User.findOne({
                 where: {
                     id: userId
                 }
             })
-            .then(user => {
-                if (user != null) {
+            .then(userFound => {
+                if (userFound != null) {
                     //Delete de tous les posts de l'user même s'il y en a pas
                     models.Post
                         .destroy({
                             where: {
-                                userId: user.id
+                                userId: userFound.id
                             }
                         })
                         .then(() => {
@@ -229,7 +242,7 @@ exports.deleteProfile = (req, res) => {
                             models.User
                                 .destroy({
                                     where: {
-                                        id: user.id
+                                        id: userFound.id
                                     }
                                 })
                                 .then(() => res.end())

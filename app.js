@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require("helmet");
+const path = require('path');
+const rateLimit = require("express-rate-limit");
 
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 
-const path = require('path');
 
 //création application Express
 const app = express();
@@ -18,11 +20,20 @@ app.use((req, res, next) => {
     next();
 });
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes 
+    max: 100 // limite chaque IP à 100 requêtes par windowMs
+});
+
+app.use(limiter);
+
 //Parser les corps des requête + forcer parse d'objets inclus dans d'autres objets
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
+app.use(helmet());
 
 //Middleware
 app.use('/images', express.static(path.join(__dirname, 'images')));

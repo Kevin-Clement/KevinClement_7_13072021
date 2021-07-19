@@ -17,10 +17,15 @@ module.exports = {
         }
       },
       content: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       attachement: {
+        allowNull: true,
         type: Sequelize.STRING
+      },
+      likes: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

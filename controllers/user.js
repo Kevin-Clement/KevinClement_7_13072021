@@ -1,5 +1,4 @@
 let bcrypt = require('bcrypt');
-let jwt = require('jsonwebtoken');
 let models = require('../models');
 let utils = require('../utils/jwtUtils');
 let verifInput = require('../utils/verifInputUtils')
@@ -145,7 +144,6 @@ exports.editPwd = (req, res) => {
                 }
             })
             .then(user => {
-                console.log('utilisateur trouvé', user)
                 bcrypt.compare(newPassword, user.password, (errComparePassword, resComparePassword) => {
                     //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
                     if (resComparePassword) {
@@ -162,7 +160,7 @@ exports.editPwd = (req, res) => {
                                     }
                                 })
                                 .then(() => res.status(201).json({
-                                    confirmation: 'mot de passe modifié avec succès'
+                                    confirmation: 'Mot de passe modifié avec succès'
                                 }))
                                 .catch(err => res.status(500).json(err))
                         })
@@ -172,7 +170,7 @@ exports.editPwd = (req, res) => {
             .catch(err => json(err))
     } else {
         res.status(406).json({
-            error: 'mot de passe non valide'
+            error: 'Mot de passe non valide'
         })
     }
 };
@@ -193,9 +191,7 @@ exports.editUserProfile = (req, res) => {
             .then(userFound => {
                 if (userFound) {
                     userFound.update({
-                        bio: (bio ? bio : userFound.bio)
-                    });
-                    userFound.update({
+                        bio: (bio ? bio : userFound.bio),
                         imageProfil: (imageProfil ? imageProfil : userFound.imageProfil)
                     });
                     return res.status(201).json(userFound);
@@ -208,13 +204,8 @@ exports.editUserProfile = (req, res) => {
             .catch(error => res.status(500).json({
                 error: 'Impossible de mettre à jour le profil utilisateur'
             }));
-    } else {
-        res.status(500).json({
-            error: 'Impossible de modifier le profil utilisateur'
-        })
     }
 }
-
 
 //Suppression d'un compte
 exports.deleteProfile = (req, res) => {
@@ -237,7 +228,7 @@ exports.deleteProfile = (req, res) => {
                             }
                         })
                         .then(() => {
-                            console.log('Tous les posts de cet user ont été supprimé');
+                            console.log('Tous les posts de cet utilisateur ont été supprimé');
                             //Suppression de l'utilisateur
                             models.User
                                 .destroy({
@@ -251,13 +242,13 @@ exports.deleteProfile = (req, res) => {
                         .catch(err => res.status(500).json(err))
                 } else {
                     res.status(401).json({
-                        error: 'Cet user n\'existe pas'
+                        error: 'Cet utilisateur n\'existe pas'
                     })
                 }
             })
     } else {
         res.status(500).json({
-            error: 'Impossible de supprimer ce compte, contacter un administrateur'
+            error: 'Impossible de supprimer ce compte, contactez un administrateur'
         })
     }
 }

@@ -1,12 +1,11 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const helmet = require("helmet");
 const path = require('path');
 const rateLimit = require("express-rate-limit");
 
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
-
+const commentRoutes = require('./routes/comment');
 
 //création application Express
 const app = express();
@@ -27,11 +26,8 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-//Parser les corps des requête + forcer parse d'objets inclus dans d'autres objets
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 app.use(helmet());
 
@@ -40,6 +36,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
+app.use("/api/post/", commentRoutes);
 
 
 module.exports = app;

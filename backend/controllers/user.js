@@ -12,7 +12,7 @@ exports.signup = (req, res) => {
 
     if (email == null || username == null || password == null) {
         res.status(400).json({
-            error: 'il manque un paramètre'
+            error: 'Il manque un paramètre'
         })
     }
 
@@ -72,9 +72,8 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
     //Récupération et validation des paramètres
     let email = req.body.email;
-    let username = req.body.username;
     let password = req.body.password;
-    if ((email == null) || (username == null) || (password == null)) {
+    if ((email == null) || (password == null)) {
         res.status(400).json({
             error: 'Il manque un paramètre'
         })

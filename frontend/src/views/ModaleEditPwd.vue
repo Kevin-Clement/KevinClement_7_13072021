@@ -1,35 +1,36 @@
 <template>
-    <div class="signup" v-if="reveleSignup">
-        <div v-on:click="toggleModaleSignup" class="overlaySignup"></div>
-        <div class="modale-signup">
-            <button v-on:click="toggleModaleSignup" class="btn-close-modale"><i class="fas fa-arrow-left"></i></button>
+    <div class="editPwd" v-if="reveleEditPwd">
+        <div v-on:click="toggleModaleEditPwd" class="overlayEditPwd"></div>
+        <div class="modale-editPwd">
+            <button v-on:click="toggleModaleEditPwd" class="btn-close-modale"><i class="fas fa-arrow-left"></i></button>
             <img class="blackLogo" src="../assets/blackLogo.png" alt="logo groupomania"/>
-            <h1>Inscription</h1>
+            <h1>Modifier votre mot de passe</h1>
 
-            <form class="formulaire" method="post" @submit.prevent="sendSignup">
+            <form class="formulaire" method="post" @submit.prevent="sendEditPwd">
             <div>
                 <label for="email"></label>
                 <input type="email" 
                 placeholder="email@exemple.com" 
-                v-model="email" />
-            </div>
-            <div>
-                <label for="username"></label>
-                <input
-                type="text"
-                id="prénom"
-                placeholder="Nom d'utilisateur"
-                v-model="username"/>
+                v-model="email"
+                id="email" />
             </div>
             <div>
                 <label for="password"></label>
                 <input
                 type="password"
-                placeholder="Votre mot de passe"
-                v-model="password"
+                placeholder="Nouveau mot de passe"
+                v-model="changePwd.newPassword"
                 />
             </div>
-            <button class="btn-signup" @click.prevent="sendSignup" type="submit">S'inscrire</button>
+            <div>
+                <label for="password"></label>
+                <input
+                type="password"
+                placeholder="Répétez le mot de passe"
+                v-model="changePwd.RepeatNewPassword"
+                />
+            </div>
+            <button class="btn-editPwd" @click.prevent="sendEditPwd" type="submit">Modifier</button>
             </form>
             <div class="error" v-if="error">
             {{ error.error }}
@@ -43,40 +44,54 @@
 import axios from "axios";
 export default {
     name: "signup",
-    props: ['reveleSignup','toggleModaleSignup'],
+    props: ['reveleEditPwd','toggleModaleEditPwd'],
     data() {
         return {
             email: '',
-            username: '',
-            password: '',
             error: '',
+            changePwd: {
+                newPassword: null,
+                RepeatNewPassword: null
+            }
         };
     },
     methods: {
-    async sendSignup() {
-        const data = {
-            email: this.email,
-            username: this.username,
-            password: this.password,
-            error: this.error
-        };
-        await axios
-            .post("http://localhost:3001/api/user/signup", data)
-            .then((res) => {
-            console.log(res);
-            document.location.reload();
-            })
-            .catch((error) => {
-            this.error = error.response.data;
-            console.log(error.response.data);
-            });
-        },
-    },
+    async sendEditPwd() {
+        if (
+        this.changePwd.newPassword == this.changePwd.RepeatNewPassword &&
+        this.changePwd.newPassword != "" &&
+        this.changePwd.RepeatNewPassword != "") {
+            let userId = localStorage.getItem("id");
+            const data = {
+                email: this.email,
+                newPassword: this.changePwd.newPassword,
+                error: this.error
+            };
+            await axios
+                .put("http://localhost:3001/api/user/" + userId, data, 
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
+                .then((res) => {
+                console.log(res);
+                window.location.reload();
+                })
+                .catch((error) => {
+                this.error = error.response.data;
+                console.log(error.response.data);
+                });
+        } else {
+        alert("Veuillez vérifier la saisie des mots de passe, ils ne sont pas identiques");
+        }
+        }
+    }
 };
 </script>
 
 <style scoped>
-.signup{
+.editPwd{
     position: fixed;
     top: 0;
     bottom: 0;
@@ -88,7 +103,7 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.modale-signup{
+.modale-editPwd{
     background-color: #f1f1f1;
     padding: 30px;
     border-radius: 10px;
@@ -112,7 +127,8 @@ export default {
     font-weight: bold;
     font-size: 20px;
 }
-.overlaySignup{
+
+.overlayEditPwd{
     background: rgba(0,0,0,0.5);
     position: fixed;
     top: 0;
@@ -129,11 +145,11 @@ export default {
     height: 42px;
     width: 35px;
     position: relative;
-    left: 55px;
+    left: 126px;
     bottom: 10px;
 }
 h1{
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 30px;
@@ -142,6 +158,7 @@ h1{
     font-weight: 900;
 }
 input {
+    width: 100%;
     padding: 10px 20px;
     font-size: 16px;
     color: #2e466e;
@@ -151,7 +168,7 @@ input {
     outline: none;
     background: transparent;
 }
-.btn-signup {
+.btn-editPwd {
     box-shadow:inset 0px 0px 15px 3px #23395e;
 	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
 	background-color:#2e466e;
@@ -167,11 +184,11 @@ input {
 	text-shadow:0px 1px 0px #263666;
     margin-top: 20px;
 }
-.btn-signup:hover {
+.btn-editPwd:hover {
 	background:linear-gradient(to bottom, #415989 5%, #2e466e 100%);
 	background-color:#415989;
 }
-.btn-signup:active{
+.btn-editPwd:active{
     position:relative;
 	top:1px;
 }

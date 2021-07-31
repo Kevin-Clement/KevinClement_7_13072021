@@ -3,6 +3,7 @@
         <div v-on:click="toggleModaleLogin" class="overlayLogin"></div>
         <div class="modale-login">
             <button v-on:click="toggleModaleLogin" class="btn-close-modale"><i class="fas fa-arrow-left"></i></button>
+            <img class="blackLogo" src="../assets/blackLogo.png" alt="logo groupomania"/>
             <h1>Connection</h1>
 
             <form class="formulaire" method="post" @submit.prevent="sendLogin">
@@ -118,23 +119,33 @@ export default {
     flex-direction: column;
     align-items: center;
 }
+.blackLogo{
+    height: 42px;
+    width: 35px;
+    position: relative;
+    left: 55px;
+    bottom: 10px;
+}
 h1{
-    font-size: 1.5rem;
+    font-size: 2rem;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 30px;
     font-family: 'roboto', arial, sans-serif;
-    border-bottom: 2px solid #2e466e;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: #2e466e;
+    font-weight: 900;
 }
 input {
-    border: solid rgb(206, 206, 206) 1px;
-    text-decoration: none;
-    box-shadow: 10px 5px 9px #67708428;
-    margin-bottom: 20px;
-    height: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #2e466e;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 2px solid #2e466e;
+    outline: none;
+    background: transparent;
 }
+
 .btn-login {
     box-shadow:inset 0px 0px 15px 3px #23395e;
 	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
@@ -146,7 +157,7 @@ input {
 	color:#ffffff;
 	font-family:Arial;
 	font-size:15px;
-	padding:6px 13px;
+	padding:10px 18px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #263666;
     margin-top: 20px;

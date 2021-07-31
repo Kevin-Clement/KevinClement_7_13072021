@@ -99,4 +99,9 @@ button:hover{
   background-color: #fff;
 }
 
+@media screen and (max-width:1400px) {
+  .middle-line {
+    height: 150px;
+}
+}
 </style>

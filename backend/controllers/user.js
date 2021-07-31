@@ -177,27 +177,25 @@ exports.editPwd = (req, res) => {
 exports.editUserProfile = (req, res) => {
     const headerAuth = req.headers['authorization'];
     const userId = utils.getUserId(headerAuth);
-    let bio = req.body.bio;
-    let imageProfil = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-
     if (userId != null) {
         models.User.findOne({
-                attributes: ['id', 'bio', 'imageProfil'],
+                attributes: ['id', 'imageProfil'],
                 where: {
                     id: userId
                 }
             })
             .then(userFound => {
-                if (userFound) {
-                    userFound.update({
-                        bio: (bio ? bio : userFound.bio),
-                        imageProfil: (imageProfil ? imageProfil : userFound.imageProfil)
-                    });
-                    return res.status(201).json(userFound);
-                } else {
-                    return res.status(404).json({
-                        error: 'Utilisateur non trouvé'
-                    });
+                if (req.file) {
+                    if (userFound.imageProfil !== null) {
+                        const fileName = userFound.imageProfil.split(`/images/`)[1];
+                        fs.unlink(`images/${fileName}`, (err) => {
+                            if (err) console.log(err);
+                            else {
+                                console.log(`Image supprimée: ` + fileName);
+                            }
+                        });
+                    }
+                    req.body.imageProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
                 }
             })
             .catch(error => res.status(500).json({

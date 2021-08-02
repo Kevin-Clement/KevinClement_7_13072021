@@ -103,35 +103,35 @@ exports.getAllPost = (req, res) => {
 }
 
 exports.editPost = (req, res) => {
-const headerAuth = req.headers['authorization'];
-const userId = utils.getUserId(headerAuth);
-let content = req.body.content;
-let attachement = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-console.log(userId);
-models.Post.findOne({
-        where: {
-            id: req.params.id
-        },
-    })
-    .then(postFound => {
-        if (userId == postFound.UserId) {
-            postFound.update({
-                content: (content ? content : postFound.content),
-                attachement: (attachement ? attachement : postFound.attachement)
+    const headerAuth = req.headers['authorization'];
+    const userId = utils.getUserId(headerAuth);
+    let content = req.body.content;
+    let attachement = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
+    console.log(userId);
+    models.Post.findOne({
+            where: {
+                id: req.params.id
+            },
+        })
+        .then(postFound => {
+            if (userId == postFound.UserId) {
+                postFound.update({
+                    content: (content ? content : postFound.content),
+                    attachement: (attachement ? attachement : postFound.attachement)
+                });
+                return res.status(200).json(postFound);
+            } else {
+                return res.status(404).json({
+                    error: "Utilisateur non autorisé à éditer ce post"
+                });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'Impossible de mettre à jour le post'
             });
-            return res.status(200).json(postFound);
-        } else {
-            return res.status(404).json({
-                error: "Utilisateur non autorisé à éditer ce post"
-            });
-        }
-    })
-    .catch(error => {
-        res.status(500).json({
-            message: 'Impossible de mettre à jour le post'
-        });
-        console.log(error);
-    })
+            console.log(error);
+        })
 }
 
 
@@ -146,84 +146,50 @@ exports.deletePost = (req, res) => {
                 id: req.params.id,
             },
         }).then((post) => {
-            if (userId == post.UserId) {
-                //Delete de tous les posts de l'user même s'il y en a pas
+            if (userId == post.UserId && post.attachement) {
+                const filename = post.attachement.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    models.Post
+                        .destroy({
+                            where: {
+                                id: post.id
+                            }
+                        })
+                    models.Comment
+                        .destroy({
+                            where: {
+                                postId: post.id
+                            }
+                        })
+                        .then(() => res.end())
+                        .catch(err => res.status(500).json(err))
+                })
+            } else if (userId == post.UserId) {
                 models.Comment
-                .destroy({
-                    where: {
-                        postId: post.id
-                    }
-                })
-                .then(() => {
-                    console.log('Tous les posts de cet utilisateur ont été supprimé');
-                post
-                    .destroy()
+                    .destroy({
+                        where: {
+                            postId: post.id
+                        }
+                    })
                     .then(() => {
-                        res.status(200).json({
-                            message: "Post supprimé !",
-                        });
+                        post
+                            .destroy()
+                            .then(() => {
+                                res.status(200).json({
+                                    message: "Post supprimé !",
+                                });
+                            })
+                            .catch((error) => {
+                                res.status(400).json({
+                                    error: error,
+                                    message: "Le post n'a pas pu être supprimé",
+                                });
+                            })
                     })
-                    .catch((error) => {
-                        res.status(400).json({
-                            error: error,
-                            message: "Le post n'a pas pu être supprimé",
-                        });
-                    })
-                })
-                .catch(err => res.status(500).json(err))
+                    .catch(err => res.status(500).json(err))
             } else {
                 res.status(403).json('Utilisateur non autorisé à supprimer ce post')
             }
         })
         .catch(error => console.log(error))
 }
-
-
-// const headerAuth = req.headers['authorization'];
-//     const userId = utils.getUserId(headerAuth);
-//     console.log(userId);
-//     models.User.findOne({
-//             where: {
-//                 id: userId
-//             }
-//         })
-//         .then(userFound => {
-//             if (userFound) {
-//                 models.Post.findOne({
-//                         where: {
-//                             id: req.params.id
-//                         },
-//                     })
-//                     .then((postFound) => {
-//                         console.log(postFound.UserId);
-//                         if (userId == postFound.UserId) {
-//                             if (postFound.attachement) {
-//                                 const filename = postFound.attachement.split('/images/')[1];
-//                                 fs.unlink(`images/${filename}`, () => {
-//                                     models.Post
-//                                         .destroy({
-//                                             where: {
-//                                                 id: postFound.id
-//                                             }
-//                                         })
-//                                         .then(() => res.end())
-//                                         .catch(err => res.status(500).json(err))
-//                                 })
-//                             } else {
-//                                 models.Post
-//                                     .destroy({
-//                                         where: {
-//                                             id: postFound.id
-//                                         }
-//                                     })
-//                                     .then(() => res.end())
-//                                     .catch(err => res.status(500).json(err))
-//                             }
-//                         } else {
-//                             res.status(403).json('Utilisateur non autorisé à supprimer ce post')
-//                         }
-//                     })
-//                     .catch(error => res.status(500).json(error));
-//             }
-//         })
-//         .catch(error => res.status(500).json(error));

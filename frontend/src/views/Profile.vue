@@ -16,13 +16,13 @@
             </div>
               <router-link :to="`/wall`"><i class="fas fa-arrow-left"></i></router-link>
             <h3 class="username">{{ users.username }}</h3>
-            <img
+            <!-- <img
               :src="users.file"
               :alt="users.file"
               v-if="users.file != null"
               />
             <label for="File">Photo de profil : </label>
-                            <input  @change="updateImg()" type="file" ref="file" name="image" class="form-control-file" id="File" accept=".jpg, .jpeg, .gif, .png">
+                            <input  @change="updateImg()" type="file" ref="file" name="image" class="form-control-file" id="File" accept=".jpg, .jpeg, .gif, .png"> -->
             <div class="setting">
               <p><u>E-mail</u> : {{ users.email }}</p>
               <p><u>Nom d'utilisateur</u> : {{ users.username }}</p>
@@ -39,7 +39,7 @@
 
 <script>
 import axios from "axios";
-import navigation from "../components/Nav.vue";
+import navigation from "../components/Nav2.vue";
 import modaleEditPwd from "../views/ModaleEditPwd.vue"
 
 export default {
@@ -95,17 +95,18 @@ export default {
         toggleModaleEditPwd: function() {
           this.reveleEditPwd = !this.reveleEditPwd
         },
-        updateImg() {
-          this.file = this.$refs.file.files[0];
-          axios
-            .put("http://localhost:3001/api/user/", { headers: { "Authorization":"Bearer " + localStorage.getItem("token")}})
-                .then(()=> {
-                    this.file = null
-                })
-                .catch((error)=>{
-                    console.log(error);
-                })
-        }
+        // updateImg() {
+        //   let userId = localStorage.getItem("id");
+        //   this.file = this.$refs.file.files[0];
+        //   axios
+        //     .get("http://localhost:3001/api/user/" + userId, { headers: { "Authorization":"Bearer " + localStorage.getItem("token")}})
+        //         .then(()=> {
+        //             this.file = null
+        //         })
+        //         .catch((error)=>{
+        //             console.log(error);
+        //         })
+        // }
         },
         mounted() {
             this.loadProfile();
@@ -126,6 +127,8 @@ export default {
 .profile-right{
   width: 100%;
   border-left: 10px solid #f1f1f1;
+  position: relative;
+  left: 80px;
 }
 .whiteLogo{
     width: 250px;
@@ -156,10 +159,8 @@ hr {
   background: none;
   color: #f1f1f1
 }
-
 .fa-cog{
-  position: relative;
-  right: 20px;
+  margin-right: 20px;
 }
 .header-profile-wall{
   display: flex;

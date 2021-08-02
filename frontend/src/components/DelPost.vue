@@ -37,9 +37,13 @@ export default {
 </script>
 
 <style scoped>
+
 button {
+    width: 20px;
+    border-radius: 50%;
     cursor: pointer;
     background-color: rgb(189, 20, 20);
     color: white;
+    position: relative;
 }
 </style>

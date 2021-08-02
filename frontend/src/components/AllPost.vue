@@ -1,33 +1,46 @@
 <template>
+<div>
   <div class="allPost">
     <div id="message-card" v-for="post in allPost" :key="post.id">
+      <div class="btn-deletePost" v-if="post.userId == userId">
+        <deletePost :id="post.id" />
+      </div>
       <div class="content">
+        <div class="createdAt">
+        <i>Par : {{ post.User.username }}</i>
+        <i>{{ moment(post.createdAt).fromNow() }}</i>
+      </div>
         <img
           :src="post.attachement"
           :alt="post.attachement"
           v-if="post.attachement != null"
         /><br />
-        {{ post.content }}
+        <div class="content-post">
+        <i>{{ post.content }}</i>
+        </div>
       </div>
-      <div class="createdAt">
-        <i>{{ moment(post.createdAt).fromNow() }}</i>
-        <i>{{ post.User.username }}</i>
-      </div>
-      <deletePost :id="post.id" />
+      
+      <createComment :id="post.id"/>
+      <allComments :id="post.id"/>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 
 import axios from "axios";
-import deletePost from "./deletePost.vue";
+import createComment from"./CreateComment.vue";
+import allComments from "./AllComments.vue";
+import deletePost from "./DelPost.vue";
 let moment = require("moment");
 
 export default {
   name: "allPost",
   components: {
     deletePost,
+    createComment,
+    allComments,
   },
   data() {
     return {
@@ -66,28 +79,48 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  right: 50px;
   background-color: #406097;
   box-shadow:inset 0px 0px 15px 3px #23395e;
 }
+.btn-deletePost{
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px;
+}
 #message-card {
   background-color: #192a48;
+  box-shadow:0px 0px 15px 3px #23395e;
   color: white;
   width: 80%;
   max-width: 500px;
   border: solid 2px;
   margin: 15px;
+  border-radius: 20px;
 }
 a {
   text-decoration: none;
   color: red;
 }
 .content {
-  padding: 30px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: #406097;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+  padding-bottom: 20px;
     font-size: 18px;
-    padding-bottom: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.content-post{
+  background-color: #406097;
+  border-radius: 20px;
+  width: 100%;
+  padding: 20px;
 }
 img {
   max-width: 500px;
@@ -95,11 +128,13 @@ img {
   height: 90%;
 }
 .createdAt {
+  background-color: #406097;
   font-size: 12px;
   display: flex;
+  width: 100%;
   justify-content: space-between;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 10px 30px;
+  border-bottom: 1px solid #fff;
   margin-bottom: 15px;
 }
 .one-message {

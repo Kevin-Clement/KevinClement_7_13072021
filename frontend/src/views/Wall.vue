@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import navigation from "../components/Nav.vue";
+import navigation from "../components/Nav2.vue";
 import createPost from "../components/CreatePost.vue";
 import allPost from "../components/AllPost.vue";
 
@@ -52,6 +52,8 @@ export default {
 .wall-right{
   width:100%;
   border-left: 10px solid #f1f1f1;
+  position: relative;
+  left: 80px;
 }
 .whiteLogo{
     width: 250px;

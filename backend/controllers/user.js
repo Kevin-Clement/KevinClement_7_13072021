@@ -1,7 +1,8 @@
 let bcrypt = require('bcrypt');
 let models = require('../models');
 let utils = require('../utils/jwtUtils');
-let verifInput = require('../utils/verifInputUtils')
+let verifInput = require('../utils/verifInputUtils');
+const fs = require('fs');
 
 //Création d'un user
 exports.signup = (req, res) => {

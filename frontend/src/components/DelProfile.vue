@@ -19,14 +19,14 @@ export default {
             if (confirm('Êtes-vous sûr de vouloir supprimer ce compte ?')) {
             axios
                 .delete("http://localhost:3001/api/user/" + this.userId , {
-                headers: { Authorization: "Bearer " + this.token },
+                    headers: { Authorization: "Bearer " + this.token },
                 })
                 .then(() => {
-                alert("Votre compte a été supprimé !");
-                this.$router.push("/");
+                    alert("Votre compte a été supprimé !");
+                    this.$router.push("/");
                 })
                 .catch((error) => {
-                console.log({ error });
+                    console.log({ error });
                 });
             }
         },

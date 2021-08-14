@@ -7,22 +7,22 @@
             <h1>Connection</h1>
 
             <form class="formulaire" method="post" @submit.prevent="sendLogin">
-            <div>
-                <label for="email"></label>
-                <input type="email" placeholder="email@exemple.com" v-model="email" />
-            </div>
-            <div>
-                <label for="password"></label>
-                <input
-                type="password"
-                placeholder="Votre mot de passe"
-                v-model="password"
-                />
-            </div>
-            <button class="btn-login" @click.prevent="sendLogin" type="submit">Se connecter</button>
+                <div>
+                    <label for="email"></label>
+                    <input type="email" placeholder="email@exemple.com" v-model="email" />
+                </div>
+                <div>
+                    <label for="password"></label>
+                    <input
+                    type="password"
+                    placeholder="Votre mot de passe"
+                    v-model="password"
+                    />
+                </div>
+                <button class="btn-login" @click.prevent="sendLogin" type="submit">Se connecter</button>
             </form>
             <div class="error" v-if="error">
-            {{ error.error }}
+                {{ error.error }}
             </div>
         </div>
     </div>
@@ -36,12 +36,12 @@ export default {
     props: ['reveleLogin','toggleModaleLogin'],
     data() {
         return {
-                token: "",
-                email: null,
-                username: null,
-                password: null,
-                userId: "",
-                error: "",
+            token: "",
+            email: null,
+            username: null,
+            password: null,
+            userId: "",
+            error: "",
         };
     },
     methods: {
@@ -62,7 +62,7 @@ export default {
             this.$router.push("/wall");
             })
             .catch((error) => {
-            this.error = error.response.data;
+                this.error = error.response.data;
             });
         },
     },
@@ -106,7 +106,6 @@ export default {
     font-weight: bold;
     font-size: 20px;
 }
-
 .overlayLogin{
     background: rgba(0,0,0,0.5);
     position: fixed;
@@ -146,7 +145,6 @@ input {
     outline: none;
     background: transparent;
 }
-
 .btn-login {
     box-shadow:inset 0px 0px 15px 3px #23395e;
 	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);

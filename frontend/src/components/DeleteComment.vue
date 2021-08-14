@@ -16,23 +16,23 @@ export default {
     data() {
         return {
         token: localStorage.getItem("token"),
-        };
+        }
     },
     methods: {
         deleteComment() {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
-        axios
-            .delete("http://localhost:3001/api/post/" + this.id + "/comment/" + this.idCom, {
-            headers: { Authorization: "Bearer " + this.token },
-            })
-            .then(() => {
-            alert("Votre commentaire a bien été supprimé !");
-            document.location.reload();
-            })
-            .catch((error) => {
-            console.log({ error });
-            });
-        }
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
+            axios
+                .delete("http://localhost:3001/api/post/" + this.id + "/comment/" + this.idCom, {
+                    headers: { Authorization: "Bearer " + this.token },
+                })
+                .then(() => {
+                    alert("Votre commentaire a bien été supprimé !");
+                    document.location.reload();
+                })
+                .catch((error) => {
+                    console.log({ error });
+                });
+            }
         }
     },
 };

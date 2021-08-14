@@ -7,19 +7,17 @@
       </div>
       <div class="content">
         <div class="createdAt">
-        <i>Par : {{ post.User.username }}</i>
-        <i>{{ moment(post.createdAt).fromNow() }}</i>
-      </div>
+          <i>Par : {{ post.User.username }}</i>
+          <i>{{ moment(post.createdAt).fromNow() }}</i>
+        </div>
         <img
           :src="post.attachement"
           :alt="post.attachement"
-          v-if="post.attachement != null"
-        /><br />
+          v-if="post.attachement != null"/><br />
         <div class="content-post">
-        <i>{{ post.content }}</i>
+          <i>{{ post.content }}</i>
         </div>
       </div>
-      
       <createComment :id="post.id"/>
       <allComments :id="post.id"/>
     </div>
@@ -57,17 +55,17 @@ export default {
   },
   async created() {
     await 
-            axios
-                .get("http://localhost:3001/api/user/" + this.userId , {
-                headers: { Authorization: "Bearer " + this.token },
-                })
-                .then((res) => {
-                this.users = res.data;
-                })
-                .catch((error) => {
-                console.log("Le post n'a pas pu être récupéré /" + error);
-                });
-            },
+      axios
+        .get("http://localhost:3001/api/user/" + this.userId , {
+          headers: { Authorization: "Bearer " + this.token },
+        })
+        .then((res) => {
+          this.users = res.data;
+        })
+        .catch((error) => {
+          console.log("Le post n'a pas pu être récupéré /" + error);
+        });
+  },
 
   methods: {
     loadPost() {
@@ -83,6 +81,7 @@ export default {
         });
     },
   },
+
   mounted() {
     this.loadPost();
   },
@@ -120,6 +119,9 @@ a {
   color: red;
 }
 .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-color: #406097;
@@ -127,10 +129,7 @@ a {
   padding-right: 30px;
   padding-top: 30px;
   padding-bottom: 20px;
-    font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  font-size: 18px;
 }
 .content-post{
   background-color: #406097;
@@ -165,12 +164,11 @@ img {
 }
 
 @media screen and (max-width: 400px) {
-    .allPost{
-      right: 42px;
-}
-#message-card {
-
-  width: 75%;
-}
+  .allPost{
+    right: 42px;
+  }
+  #message-card {
+    width: 75%;
+  }
 }
 </style>

@@ -7,15 +7,13 @@
             <deleteComment :idCom="comment.id" :id="id" />
           </div>
             <div class="content">
-            <i class="user-name"
-                >{{ comment.User.username }}</i
-            ><br />
-            <hr>
-            <strong>{{ comment.comment }}</strong><br />
-            <i class="date">{{ moment(comment.createdAt).fromNow() }}</i>
+              <i class="user-name">{{ comment.User.username }}</i><br />
+              <hr>
+              <strong>{{ comment.comment }}</strong><br />
+              <i class="date">{{ moment(comment.createdAt).fromNow() }}</i>
             </div>
         </div>
-        </div>
+    </div>
 </div>
 </template>
 
@@ -45,18 +43,18 @@ export default {
   },
   async created() {
     await 
-            axios
-                .get("http://localhost:3001/api/user/" + this.userId , {
-                headers: { Authorization: "Bearer " + this.token },
-                })
-                .then((res) => {
-                this.users = res.data;
-                console.log(this.users);
-                })
-                .catch((error) => {
-                console.log("Le post n'a pas pu être récupéré /" + error);
-                });
-            },
+      axios
+        .get("http://localhost:3001/api/user/" + this.userId , {
+          headers: { Authorization: "Bearer " + this.token },
+        })
+        .then((res) => {
+          this.users = res.data;
+          console.log(this.users);
+        })
+        .catch((error) => {
+          console.log("Le post n'a pas pu être récupéré /" + error);
+        });
+  },
   methods: {
     loadComments() {
       axios
@@ -64,7 +62,6 @@ export default {
           headers: { Authorization: "Bearer " + this.token },
         })
         .then((res) => {
-          
           this.allComments = res.data;
         })
         .catch((error) => {
@@ -89,18 +86,18 @@ export default {
   display: flex;
 }
 .btn-commentToggle{
-    font-size: 11px;
-    padding: 5px 9px;
-    border-radius: 5px;
-    font-weight: bold;
-    border: none;
-    text-decoration: none;
-    margin-bottom: 10px;
-    background-color: #fff;
-    color: #406097;
-    cursor: pointer;
-    margin-left: 25px;
-    margin-bottom: 20px;
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+  text-decoration: none;
+  margin-bottom: 10px;
+  background-color: #fff;
+  color: #406097;
+  cursor: pointer;
+  margin-left: 25px;
+  margin-bottom: 20px;
 }
 .btn-deleteCom{
   display: flex;
@@ -121,10 +118,10 @@ export default {
   font-size: 11px;
 }
 hr {
-    border: none;
-    border-top: 1px solid #f1f1f1;
-    overflow: visible;
-    margin-bottom: 10px;
+  border: none;
+  border-top: 1px solid #f1f1f1;
+  overflow: visible;
+  margin-bottom: 10px;
 }
 .date {
   font-size: 12px;

@@ -102,37 +102,37 @@ exports.getAllPost = (req, res) => {
     })
 }
 
-exports.editPost = (req, res) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = utils.getUserId(headerAuth);
-    let content = req.body.content;
-    let attachement = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-    console.log(userId);
-    models.Post.findOne({
-            where: {
-                id: req.params.id
-            },
-        })
-        .then(postFound => {
-            if (userId == postFound.UserId) {
-                postFound.update({
-                    content: (content ? content : postFound.content),
-                    attachement: (attachement ? attachement : postFound.attachement)
-                });
-                return res.status(200).json(postFound);
-            } else {
-                return res.status(404).json({
-                    error: "Utilisateur non autorisé à éditer ce post"
-                });
-            }
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: 'Impossible de mettre à jour le post'
-            });
-            console.log(error);
-        })
-}
+// exports.editPost = (req, res) => {
+//     const headerAuth = req.headers['authorization'];
+//     const userId = utils.getUserId(headerAuth);
+//     let content = req.body.content;
+//     let attachement = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
+//     console.log(userId);
+//     models.Post.findOne({
+//             where: {
+//                 id: req.params.id
+//             },
+//         })
+//         .then(postFound => {
+//             if (userId == postFound.UserId) {
+//                 postFound.update({
+//                     content: (content ? content : postFound.content),
+//                     attachement: (attachement ? attachement : postFound.attachement)
+//                 });
+//                 return res.status(200).json(postFound);
+//             } else {
+//                 return res.status(404).json({
+//                     error: "Utilisateur non autorisé à éditer ce post"
+//                 });
+//             }
+//         })
+//         .catch(error => {
+//             res.status(500).json({
+//                 message: 'Impossible de mettre à jour le post'
+//             });
+//             console.log(error);
+//         })
+// }
 
 
 
@@ -148,6 +148,7 @@ exports.deletePost = (req, res) => {
         }).then((post) => {
             if ((userId == post.UserId && post.attachement) || (isAdmin = true && post.attachement)) {
                 const filename = post.attachement.split('/images/')[1];
+                console.log(filename);
                 fs.unlink(`images/${filename}`, () => {
                     models.Post
                         .destroy({

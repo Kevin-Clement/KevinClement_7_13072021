@@ -52,18 +52,18 @@ export default {
                 headers: { Authorization: "Bearer " + token },
                 })
                 .then(() => {
-                document.location.reload();
+                    document.location.reload();
                 })
                 .catch((error) => {
-                this.error = error.response.data;
+                    this.error = error.response.data;
                 });
         }
         else{
-            alert("Publiez un message !")
+                alert("Publiez un message !")
             }
         },
         selectFile() {
-        this.file = this.$refs.file.files[0];
+            this.file = this.$refs.file.files[0];
         },
     },
 };
@@ -164,14 +164,14 @@ input {
     }
 }
 @media screen and (max-width: 400px) {
-form{
-    width: 80%;
-    right: 9%;
-}
-.post h2{
-    font-size: 1rem;
-}
-textarea::placeholder{
+    form{
+        width: 80%;
+        right: 9%;
+    }
+    .post h2{
+        font-size: 1rem;
+    }
+    textarea::placeholder{
         font-size: 0.8rem;
         width: 120px;
         height: 20px;

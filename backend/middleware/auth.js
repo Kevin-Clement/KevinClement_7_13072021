@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config(); 
+require('dotenv').config();
 
 module.exports = (req, res, next) => {
     // Récupération du token dans les paramètres
@@ -14,8 +14,9 @@ module.exports = (req, res, next) => {
             }
             next();
         });
-    }
-    else {
-        res.status(401).json({error:"accès non autorisé"});
+    } else {
+        res.status(401).json({
+            error: "accès non autorisé"
+        });
     }
 };

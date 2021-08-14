@@ -13,7 +13,7 @@
             <div class="header-profile-wall">
               <h3 class="logo-setting"><i class="fas fa-cog"></i>Paramètres du compte</h3>
             </div>
-              <router-link :to="`/wall`"><i class="fas fa-arrow-left"></i></router-link>
+            <router-link :to="`/wall`"><i class="fas fa-arrow-left"></i></router-link>
             <h3 class="username">{{ users.username }}</h3>
             <div class="setting">
               <p><u>E-mail</u> : {{ users.email }}</p>
@@ -24,7 +24,7 @@
             <div class="btn-profile">
                 <button v-on:click="toggleModaleEditPwd" class="btn-update-pwd">Modifier le mot de passe</button>
                 <deleteProfile/>
-              </div>
+            </div>
           </div>
           <allProfiles/>
           <modaleEditPwd v-bind:reveleEditPwd="reveleEditPwd" v-bind:toggleModaleEditPwd="toggleModaleEditPwd"/>
@@ -64,18 +64,18 @@ export default {
         loadProfile() {
             axios
                 .get("http://localhost:3001/api/user/" + this.userId , {
-                headers: { Authorization: "Bearer " + this.token },
+                  headers: { Authorization: "Bearer " + this.token },
                 })
                 .then((res) => {
-                this.users = res.data;
-                console.log(res.data);
+                  this.users = res.data;
+                  console.log(res.data);
                 })
                 .catch((error) => {
-                console.log("Le post n'a pas pu être récupéré /" + error);
+                  console.log("Le post n'a pas pu être récupéré /" + error);
                 });
             },
         toggleModaleEditPwd: function() {
-          this.reveleEditPwd = !this.reveleEditPwd
+            this.reveleEditPwd = !this.reveleEditPwd
         },
         },
         mounted() {
@@ -112,10 +112,10 @@ h2{
   margin-left: 50px;
 }
 hr {
-    border: none;
-    border-top: 10px solid #f1f1f1;
-    overflow: visible;
-    height: 5px;
+  border: none;
+  border-top: 10px solid #f1f1f1;
+  overflow: visible;
+  height: 5px;
 }
 .profile-wall{
   margin: 30px
@@ -155,24 +155,24 @@ h3{
   margin-bottom: 40px;
 }
 p{
-    color: #f1f1f1;
-    padding:20px;
-    border: 1px solid #42639c;
+  color: #f1f1f1;
+  padding:20px;
+  border: 1px solid #42639c;
 }
 .btn-update-pwd {
-    box-shadow:inset 0px 0px 15px 3px #ffffff;
-    background-color: #ebe9e9;
-    border-radius:17px;
-    border: 1px solid #dadada;
-    display:inline-block;
-    cursor:pointer;
-    color: #2e466e;
-    font-family: 'roboto', sans-serif;
-    font-size: 15px;
-    padding: 10px 18px;
-    text-decoration: none;
-    margin: 20px 10px;
-    transition: .2s ease-in-out;
+  box-shadow:inset 0px 0px 15px 3px #ffffff;
+  background-color: #ebe9e9;
+  border-radius:17px;
+  border: 1px solid #dadada;
+  display:inline-block;
+  cursor:pointer;
+  color: #2e466e;
+  font-family: 'roboto', sans-serif;
+  font-size: 15px;
+  padding: 10px 18px;
+  text-decoration: none;
+  margin: 20px 10px;
+  transition: .2s ease-in-out;
 }
 .btn-update-pwd:hover{
   box-shadow:inset 0px 0px 8px 2px #b3b3b3;
@@ -193,27 +193,26 @@ p{
     width: 200px;
     height: 45px;
     margin: 20px 35px;
-}
-.profile-wall{
+  }
+  .profile-wall{
     margin: 20px;
-}
-h2{
+  }
+  h2{
     font-size: 1.7rem;
-}
-h3{
-  margin: 0;
-  font-size: 1.3rem;
-}
-.fa-arrow-left{
-  display: none;
-}
-.btn-profile{
-  display: inherit;
-  align-items: inherit;
-}
-.btn-update-pwd{
-  font-size: inherit;
-}
-
+  }
+  h3{
+    margin: 0;
+    font-size: 1.3rem;
+  }
+  .fa-arrow-left{
+    display: none;
+  }
+  .btn-profile{
+    display: inherit;
+    align-items: inherit;
+  }
+  .btn-update-pwd{
+    font-size: inherit;
+  }
 }
 </style>

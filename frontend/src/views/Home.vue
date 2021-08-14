@@ -13,10 +13,10 @@
       <div class="btn-home">
         <button v-on:click="toggleModaleSignup" class="btn-home-signup">S'enregistrer</button>
         <button v-on:click="toggleModaleLogin" class="btn-home-login">Se connecter</button>
-        </div>
       </div>
-      <signup v-bind:reveleSignup="reveleSignup" v-bind:toggleModaleSignup="toggleModaleSignup"/>
-      <login v-bind:reveleLogin="reveleLogin" v-bind:toggleModaleLogin="toggleModaleLogin"/>
+    </div>
+    <signup v-bind:reveleSignup="reveleSignup" v-bind:toggleModaleSignup="toggleModaleSignup"/>
+    <login v-bind:reveleLogin="reveleLogin" v-bind:toggleModaleLogin="toggleModaleLogin"/>
   </div>
 </template>
 
@@ -95,13 +95,13 @@ h1 {
     transition: .3s ease-in-out;
 }
 button:hover{
-  color: black;
-  background-color: #fff;
+    color: black;
+    background-color: #fff;
 }
 
 @media screen and (max-width:1400px) {
   .middle-line {
     height: 150px;
-}
+  }
 }
 </style>

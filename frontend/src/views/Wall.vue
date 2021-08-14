@@ -1,17 +1,17 @@
 <template>
-<div class="wall">
-    <navigation/>
-    <div class="wall-right">
-      <div class="title-wall">
-        <img class="whiteLogo" src="../assets/icon-left-font-monochrome-white.png" alt="logo groupomania blanc"/>
-        <h2>Acceuil - {{ users.username }}</h2>
+  <div class="wall">
+      <navigation/>
+      <div class="wall-right">
+        <div class="title-wall">
+          <img class="whiteLogo" src="../assets/icon-left-font-monochrome-white.png" alt="logo groupomania blanc"/>
+          <h2>Acceuil - {{ users.username }}</h2>
+          <hr>
+        </div>
+        <create-post/>
         <hr>
+        <all-post/>
       </div>
-      <create-post/>
-    <hr>
-      <all-post/>
-    </div>
-</div>
+  </div>
 </template>
 
 <script>
@@ -36,18 +36,18 @@ export default {
   },
   async created() {
     await 
-            axios
-                .get("http://localhost:3001/api/user/" + this.userId , {
-                headers: { Authorization: "Bearer " + this.token },
-                })
-                .then((res) => {
-                this.users = res.data;
-                console.log(res.data);
-                })
-                .catch((error) => {
-                console.log("Le post n'a pas pu être récupéré /" + error);
-                });
-            },
+      axios
+        .get("http://localhost:3001/api/user/" + this.userId , {
+          headers: { Authorization: "Bearer " + this.token },
+        })
+        .then((res) => {
+          this.users = res.data;
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log("Le post n'a pas pu être récupéré /" + error);
+        });
+  },
 };
 </script>
 
@@ -102,13 +102,13 @@ hr {
 }
 
 @media screen and (max-width: 400px) {
-    .whiteLogo{
+  .whiteLogo{
     width: 180px;
     height: 38px;
-}
-h2{
+  }
+  h2{
     font-size: 1rem;
-}
+  }
 }
 
 </style>

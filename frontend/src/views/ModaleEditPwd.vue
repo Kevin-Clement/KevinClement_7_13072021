@@ -7,33 +7,33 @@
             <h1>Modifier votre mot de passe</h1>
 
             <form class="formulaire" method="post" @submit.prevent="sendEditPwd">
-            <div>
-                <label for="email"></label>
-                <input type="email" 
-                placeholder="email@exemple.com" 
-                v-model="email"
-                id="email" />
-            </div>
-            <div>
-                <label for="password"></label>
-                <input
-                type="password"
-                placeholder="Nouveau mot de passe"
-                v-model="changePwd.newPassword"
-                />
-            </div>
-            <div>
-                <label for="password"></label>
-                <input
-                type="password"
-                placeholder="Répétez le mot de passe"
-                v-model="changePwd.RepeatNewPassword"
-                />
-            </div>
-            <button class="btn-editPwd" @click.prevent="sendEditPwd" type="submit">Modifier</button>
+                <div>
+                    <label for="email"></label>
+                    <input type="email" 
+                    placeholder="email@exemple.com" 
+                    v-model="email"
+                    id="email" />
+                </div>
+                <div>
+                    <label for="password"></label>
+                    <input
+                    type="password"
+                    placeholder="Nouveau mot de passe"
+                    v-model="changePwd.newPassword"
+                    />
+                </div>
+                <div>
+                    <label for="password"></label>
+                    <input
+                    type="password"
+                    placeholder="Répétez le mot de passe"
+                    v-model="changePwd.RepeatNewPassword"
+                    />
+                </div>
+                <button class="btn-editPwd" @click.prevent="sendEditPwd" type="submit">Modifier</button>
             </form>
             <div class="error" v-if="error">
-            {{ error.error }}
+                {{ error.error }}
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
 
 import axios from "axios";
 export default {
-    name: "signup",
+    name: "ModaleEditPwd",
     props: ['reveleEditPwd','toggleModaleEditPwd'],
     data() {
         return {
@@ -75,15 +75,15 @@ export default {
                     }
                 })
                 .then((res) => {
-                console.log(res);
-                window.location.reload();
+                    console.log(res);
+                    window.location.reload();
                 })
                 .catch((error) => {
-                this.error = error.response.data;
-                console.log(error.response.data);
+                    this.error = error.response.data;
+                    console.log(error.response.data);
                 });
         } else {
-        alert("Veuillez vérifier la saisie des mots de passe, ils ne sont pas identiques");
+            alert("Veuillez vérifier la saisie des mots de passe, ils ne sont pas identiques");
         }
         }
     }
@@ -127,7 +127,6 @@ export default {
     font-weight: bold;
     font-size: 20px;
 }
-
 .overlayEditPwd{
     background: rgba(0,0,0,0.5);
     position: fixed;

@@ -5,34 +5,33 @@
             <button v-on:click="toggleModaleSignup" class="btn-close-modale"><i class="fas fa-arrow-left"></i></button>
             <img class="blackLogo" src="../assets/blackLogo.png" alt="logo groupomania"/>
             <h1>Inscription</h1>
-
             <form class="formulaire" method="post" @submit.prevent="sendSignup">
-            <div>
-                <label for="email"></label>
-                <input type="email" 
-                placeholder="email@exemple.com" 
-                v-model="email" />
-            </div>
-            <div>
-                <label for="username"></label>
-                <input
-                type="text"
-                id="prénom"
-                placeholder="Nom d'utilisateur"
-                v-model="username"/>
-            </div>
-            <div>
-                <label for="password"></label>
-                <input
-                type="password"
-                placeholder="Votre mot de passe"
-                v-model="password"
-                />
-            </div>
-            <button class="btn-signup" @click.prevent="sendSignup" type="submit">S'inscrire</button>
+                <div>
+                    <label for="email"></label>
+                    <input type="email" 
+                    placeholder="email@exemple.com" 
+                    v-model="email" />
+                </div>
+                <div>
+                    <label for="username"></label>
+                    <input
+                    type="text"
+                    id="prénom"
+                    placeholder="Nom d'utilisateur"
+                    v-model="username"/>
+                </div>
+                <div>
+                    <label for="password"></label>
+                    <input
+                    type="password"
+                    placeholder="Votre mot de passe"
+                    v-model="password"
+                    />
+                </div>
+                <button class="btn-signup" @click.prevent="sendSignup" type="submit">S'inscrire</button>
             </form>
             <div class="error" v-if="error">
-            {{ error.error }}
+                {{ error.error }}
             </div>
         </div>
     </div>
@@ -63,12 +62,12 @@ export default {
         await axios
             .post("http://localhost:3001/api/user/signup", data)
             .then((res) => {
-            console.log(res);
-            document.location.reload();
+                console.log(res);
+                document.location.reload();
             })
             .catch((error) => {
-            this.error = error.response.data;
-            console.log(error.response.data);
+                this.error = error.response.data;
+                console.log(error.response.data);
             });
         },
     },

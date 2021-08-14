@@ -1,5 +1,4 @@
 <template>
-
     <div class="navigation" :class="{ active: menuToggle }" @click="menuToggle = !menuToggle">
         <span v-if="menuToggle" class="name">{{ users.username }}</span>
             <ul class="links">
@@ -45,22 +44,22 @@ export default {
     },
     async created() {
     await 
-            axios
-                .get("http://localhost:3001/api/user/" + this.userId , {
+        axios
+            .get("http://localhost:3001/api/user/" + this.userId , {
                 headers: { Authorization: "Bearer " + this.token },
-                })
-                .then((res) => {
+            })
+            .then((res) => {
                 this.users = res.data;
                 console.log(res.data);
-                })
-                .catch((error) => {
+            })
+            .catch((error) => {
                 console.log("Le post n'a pas pu être récupéré /" + error);
-                });
-            },
+            });
+    },
     methods: {
         Logout() {
-        localStorage.clear();
-        this.$router.push("/");
+            localStorage.clear();
+            this.$router.push("/");
         },
     },
 };

@@ -1,21 +1,21 @@
 <template>
     <div>
         <form method="post" @submit.prevent="buttonCreateComment">
-        <div>
-            <label for="comment"></label>
-            <input
-            type="text"
-            id="comment"
-            placeholder="Commentaire"
-            v-model="comment"
-            />
-        </div>
-        <button type="submit" @click.prevent="buttonCreateComment">
-            <span class="btn-submitCom">Envoyer</span> <i class="far fa-comments"></i>
-        </button>
+            <div>
+                <label for="comment"></label>
+                <input
+                type="text"
+                id="comment"
+                placeholder="Commentaire"
+                v-model="comment"
+                />
+            </div>
+            <button type="submit" @click.prevent="buttonCreateComment">
+                <span class="btn-submitCom">Envoyer</span> <i class="far fa-comments"></i>
+            </button>
         </form>
         <div class="error" v-if="error">
-        {{ error.error }}
+            {{ error.error }}
         </div>
     </div>
 </template>
@@ -49,14 +49,14 @@ export default {
                     }
                     )
                     .then((res) => {
-                    console.log(res);
-                    document.location.reload();
+                        console.log(res);
+                        document.location.reload();
                     })
                     .catch((error) => {
-                    this.error = error.response.data;
+                        this.error = error.response.data;
                     });
             }else{
-            alert("Publiez un commentaire !")
+                alert("Publiez un commentaire !")
             }
         }
     },
@@ -115,13 +115,13 @@ button {
 
 @media screen and (max-width: 400px) {
     #comment{
-    width: 65%;
-}
+        width: 65%;
+    }
     .btn-submitCom{
         display: none;
     }
     button {
-    width: 15%;
-}
+        width: 15%;
+    }
 }
 </style>

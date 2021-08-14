@@ -190,35 +190,35 @@ exports.editPwd = (req, res) => {
     }
 };
 
-exports.editUserProfile = (req, res) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = utils.getUserId(headerAuth);
-    if (userId != null) {
-        models.User.findOne({
-                attributes: ['id', 'imageProfil'],
-                where: {
-                    id: userId
-                }
-            })
-            .then(userFound => {
-                if (req.file) {
-                    if (userFound.imageProfil !== null) {
-                        const fileName = userFound.imageProfil.split(`/images/`)[1];
-                        fs.unlink(`images/${fileName}`, (err) => {
-                            if (err) console.log(err);
-                            else {
-                                console.log(`Image supprimée: ` + fileName);
-                            }
-                        });
-                    }
-                    req.body.imageProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-                }
-            })
-            .catch(error => res.status(500).json({
-                error: 'Impossible de mettre à jour le profil utilisateur'
-            }));
-    }
-}
+// exports.editUserProfile = (req, res) => {
+//     const headerAuth = req.headers['authorization'];
+//     const userId = utils.getUserId(headerAuth);
+//     if (userId != null) {
+//         models.User.findOne({
+//                 attributes: ['id', 'imageProfil'],
+//                 where: {
+//                     id: userId
+//                 }
+//             })
+//             .then(userFound => {
+//                 if (req.file) {
+//                     if (userFound.imageProfil !== null) {
+//                         const fileName = userFound.imageProfil.split(`/images/`)[1];
+//                         fs.unlink(`images/${fileName}`, (err) => {
+//                             if (err) console.log(err);
+//                             else {
+//                                 console.log(`Image supprimée: ` + fileName);
+//                             }
+//                         });
+//                     }
+//                     req.body.imageProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+//                 }
+//             })
+//             .catch(error => res.status(500).json({
+//                 error: 'Impossible de mettre à jour le profil utilisateur'
+//             }));
+//     }
+// }
 
 //Suppression d'un compte
 exports.deleteProfile = (req, res) => {
@@ -266,24 +266,3 @@ exports.deleteProfile = (req, res) => {
     }
 
 }
-
-// exports.deleteUserAccount = async (req, res, next) => {
-//     try {
-//         const user = req.user.admin ?
-//             await User.findOne({
-//                 attributes: ['email'],
-//                 where: {
-//                     email: email
-//                 }
-//             }) :
-//             req.user
-//         await user.softDestroy()
-//         res.status(200).json({
-//             message: 'Compte supprimé'
-//         })
-//     } catch (error) {
-//         res.status(400).json({
-//             error
-//         })
-//     }
-// }

@@ -3,7 +3,7 @@
   <button class="btn-commentToggle" @click="commentToggle = !commentToggle">Commentaire</button>
     <div id="oneComment" :class="{ active: commentToggle }">
         <div id="comment-card" v-for="comment in allComments" :key="comment.id">
-          <div class="btn-deleteCom" v-if="comment.userId == userId">
+          <div class="btn-deleteCom" v-if="comment.userId == userId || users.isAdmin == 1">
             <deleteComment :idCom="comment.id" :id="id" />
           </div>
             <div class="content">
@@ -14,9 +14,6 @@
             <strong>{{ comment.comment }}</strong><br />
             <i class="date">{{ moment(comment.createdAt).fromNow() }}</i>
             </div>
-            <!-- <div v-if="isAdmin == true">
-            <deleteComment :idComm="comment.id" />
-            </div> -->
         </div>
         </div>
 </div>
@@ -39,21 +36,36 @@ export default {
     return {
       commentToggle: false,
       moment: moment,
-      token: "",
+      isAdmin: localStorage.getItem("isAdmin"),
+      token: localStorage.getItem("token"),
       userId: localStorage.getItem("id"),
       allComments: [],
+      users: [],
     };
   },
+  async created() {
+    await 
+            axios
+                .get("http://localhost:3001/api/user/" + this.userId , {
+                headers: { Authorization: "Bearer " + this.token },
+                })
+                .then((res) => {
+                this.users = res.data;
+                console.log(this.users);
+                })
+                .catch((error) => {
+                console.log("Le post n'a pas pu être récupéré /" + error);
+                });
+            },
   methods: {
     loadComments() {
-      let token = localStorage.getItem("token");
       axios
         .get("http://localhost:3001/api/post/" + this.id + "/comments/", {
-          headers: { Authorization: "Bearer " + token },
+          headers: { Authorization: "Bearer " + this.token },
         })
         .then((res) => {
+          
           this.allComments = res.data;
-          console.log(this.allComments)
         })
         .catch((error) => {
           console.log({ error });
@@ -77,17 +89,18 @@ export default {
   display: flex;
 }
 .btn-commentToggle{
-  position: relative;
-  left: 80%;
-  font-size:11px;
-	padding:5px 9px;
-  border-radius: 5px;
-  border:none;
-  text-decoration:none;
-  margin-bottom: 10px;
-  background-color: #fff;
-  color: #406097;
-  cursor: pointer;
+    font-size: 11px;
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    text-decoration: none;
+    margin-bottom: 10px;
+    background-color: #fff;
+    color: #406097;
+    cursor: pointer;
+    margin-left: 25px;
+    margin-bottom: 20px;
 }
 .btn-deleteCom{
   display: flex;
@@ -129,5 +142,11 @@ hr {
 }
 .commentaire {
   margin: 15px;
+}
+
+@media screen and (max-width: 400px) {
+  .btn-commentToggle{
+    left: 64%;
+}
 }
 </style>

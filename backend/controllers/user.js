@@ -129,6 +129,21 @@ exports.userProfile = (req, res) => {
         .catch(error => res.status(500).json(error))
 };
 
+exports.allProfiles = (req, res) => {
+    models.User.findAll({
+            order: [
+                [
+                    'createdAt', 'DESC'
+                ]
+            ],
+
+            attributes: ['id', 'email', 'username', 'isAdmin'],
+
+        })
+        .then(user => res.status(200).json(user))
+        .catch(error => res.status(500).json(error))
+};
+
 //modification d'un profil
 exports.editPwd = (req, res) => {
     //TO DO:
@@ -249,4 +264,26 @@ exports.deleteProfile = (req, res) => {
             error: 'Impossible de supprimer ce compte, contactez un administrateur'
         })
     }
+
 }
+
+// exports.deleteUserAccount = async (req, res, next) => {
+//     try {
+//         const user = req.user.admin ?
+//             await User.findOne({
+//                 attributes: ['email'],
+//                 where: {
+//                     email: email
+//                 }
+//             }) :
+//             req.user
+//         await user.softDestroy()
+//         res.status(200).json({
+//             message: 'Compte supprimé'
+//         })
+//     } catch (error) {
+//         res.status(400).json({
+//             error
+//         })
+//     }
+// }

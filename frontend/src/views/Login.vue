@@ -57,6 +57,7 @@ export default {
             {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("id", res.data.userId);
+                localStorage.setItem("isAdmin", res.data.isAdmin);
             }
             this.$router.push("/wall");
             })

@@ -52,9 +52,7 @@ export default {
                 headers: { Authorization: "Bearer " + token },
                 })
                 .then(() => {
-                alert("Votre message a bien été envoyé !");
                 document.location.reload();
-                this.$router.push("/wall");
                 })
                 .catch((error) => {
                 this.error = error.response.data;
@@ -161,6 +159,20 @@ input {
     }
     textarea::placeholder{
         font-size: 1rem;
+        width: 120px;
+        height: 20px;
+    }
+}
+@media screen and (max-width: 400px) {
+form{
+    width: 80%;
+    right: 9%;
+}
+.post h2{
+    font-size: 1rem;
+}
+textarea::placeholder{
+        font-size: 0.8rem;
         width: 120px;
         height: 20px;
     }

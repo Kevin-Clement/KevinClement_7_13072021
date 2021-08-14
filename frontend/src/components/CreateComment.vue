@@ -11,7 +11,7 @@
             />
         </div>
         <button type="submit" @click.prevent="buttonCreateComment">
-            Envoyer <i class="far fa-comments"></i>
+            <span class="btn-submitCom">Envoyer</span> <i class="far fa-comments"></i>
         </button>
         </form>
         <div class="error" v-if="error">
@@ -29,32 +29,36 @@ export default {
     },
     data() {
         return {
+            token: localStorage.getItem("token"),
             comment: "",
             error: "",
         };
     },
     methods: {
         buttonCreateComment() {
-        const data = {
-            comment: this.comment,
-        };
-        let token = localStorage.getItem("token");
-        axios
-            .post(
-            "http://localhost:3001/api/post/" + this.id + "/comment/",
-            data,
-            {
-                headers: { Authorization: "Bearer " + token },
+            if(this.comment !== "") {
+                const data = {
+                    comment: this.comment,
+                };
+                axios
+                    .post(
+                    "http://localhost:3001/api/post/" + this.id + "/comment/",
+                    data,
+                    {
+                        headers: { Authorization: "Bearer " + this.token },
+                    }
+                    )
+                    .then((res) => {
+                    console.log(res);
+                    document.location.reload();
+                    })
+                    .catch((error) => {
+                    this.error = error.response.data;
+                    });
+            }else{
+            alert("Publiez un commentaire !")
             }
-            )
-            .then((res) => {
-            console.log(res);
-            document.location.reload();
-            })
-            .catch((error) => {
-            this.error = error.response.data;
-            });
-        },
+        }
     },
 };
 </script>
@@ -76,6 +80,7 @@ form{
 #comment{
     display: flex;
     justify-content: center;
+    color: #fff;
     background-color: #6481b3;
     border-radius: 20px;
     width: 80%;
@@ -86,17 +91,37 @@ form{
     margin-bottom: 5px;
 }
 button {
-    background-color: #192a48;
-    color: white;
-    padding: 6px;
-    margin-bottom: 10px;
+    width: 20%;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 9px;
+    border-radius: 5px;
     border: none;
     text-decoration: none;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    background-color: #fff;
+    color: #406097;
+    cursor: pointer;
+    position: relative;
+    left: 70%;
 }
 .error {
     font-size: 11px;
     background-color: rgb(231, 185, 185);
     color: rgb(53, 21, 21);
     padding: 10px;
+}
+
+@media screen and (max-width: 400px) {
+    #comment{
+    width: 65%;
+}
+    .btn-submitCom{
+        display: none;
+    }
+    button {
+    width: 15%;
+}
 }
 </style>

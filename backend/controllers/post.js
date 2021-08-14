@@ -146,7 +146,7 @@ exports.deletePost = (req, res) => {
                 id: req.params.id,
             },
         }).then((post) => {
-            if (userId == post.UserId && post.attachement) {
+            if ((userId == post.UserId && post.attachement) || (isAdmin = true && post.attachement)) {
                 const filename = post.attachement.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
                     models.Post
@@ -164,7 +164,7 @@ exports.deletePost = (req, res) => {
                         .then(() => res.end())
                         .catch(err => res.status(500).json(err))
                 })
-            } else if (userId == post.UserId) {
+            } else if ((userId == post.UserId) || (isAdmin = true)) {
                 models.Comment
                     .destroy({
                         where: {

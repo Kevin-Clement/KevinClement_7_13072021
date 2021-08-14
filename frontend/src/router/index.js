@@ -50,6 +50,20 @@ const routes = [
       }
     },
   },
+  // {
+  // path: "/allProfile",
+  //   name: "allProfile",
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../views/allProfile.vue"),
+  //   beforeEnter: (to, from, next) => {
+  //     let isAdmin = localStorage.getItem("isAdmin")
+  //     if (isAdmin = true) {
+  //       next();
+  //     } else {
+  //       next({ name: "login" });
+  //     }
+  //   },
+  // }
 ]
 
 const router = new VueRouter({

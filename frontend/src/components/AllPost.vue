@@ -2,8 +2,8 @@
 <div>
   <div class="allPost">
     <div id="message-card" v-for="post in allPost" :key="post.id">
-      <div class="btn-deletePost" v-if="post.userId == userId">
-        <deletePost :id="post.id" />
+      <div class="btn-deletePost" v-if="post.userId == userId || users.isAdmin == 1">
+        <deletePost :id="post.id"/>
       </div>
       <div class="content">
         <div class="createdAt">
@@ -45,20 +45,35 @@ export default {
   data() {
     return {
       moment: moment,
-      token: "",
+      token: localStorage.getItem("token"),
       userId: localStorage.getItem("id"),
-      isAdmin: "",
+      isAdmin: localStorage.getItem("isAdmin"),
+      users: [],
       allPost: [],
       content: "",
       createAt: "",
     };
+    
   },
+  async created() {
+    await 
+            axios
+                .get("http://localhost:3001/api/user/" + this.userId , {
+                headers: { Authorization: "Bearer " + this.token },
+                })
+                .then((res) => {
+                this.users = res.data;
+                })
+                .catch((error) => {
+                console.log("Le post n'a pas pu être récupéré /" + error);
+                });
+            },
+
   methods: {
     loadPost() {
-      let token = localStorage.getItem("token");
       axios
         .get("http://localhost:3001/api/post/", {
-          headers: { Authorization: "Bearer " + token },
+          headers: { Authorization: "Bearer " + this.token },
         })
         .then((res) => {
           this.allPost = res.data;
@@ -72,6 +87,7 @@ export default {
     this.loadPost();
   },
 };
+
 </script>
 
 <style scoped>
@@ -146,5 +162,15 @@ img {
 }
 .adminDelete {
   margin: 30px;
+}
+
+@media screen and (max-width: 400px) {
+    .allPost{
+      right: 42px;
+}
+#message-card {
+
+  width: 75%;
+}
 }
 </style>

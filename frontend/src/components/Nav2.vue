@@ -1,6 +1,7 @@
 <template>
 
     <div class="navigation" :class="{ active: menuToggle }" @click="menuToggle = !menuToggle">
+        <span v-if="menuToggle" class="name">{{ users.username }}</span>
             <ul class="links">
                 <li class="list">
                     <router-link to="/wall">
@@ -29,25 +30,40 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     name:'nav2',
     data() {
         return {
             menuToggle: false,
             isSelected: false,
-            userId: "",
+            token: localStorage.getItem("token"),
+            userId: localStorage.getItem("id"),
+            isAdmin: localStorage.getItem("isAdmin"),
+            users: [],
         }
     },
+    async created() {
+    await 
+            axios
+                .get("http://localhost:3001/api/user/" + this.userId , {
+                headers: { Authorization: "Bearer " + this.token },
+                })
+                .then((res) => {
+                this.users = res.data;
+                console.log(res.data);
+                })
+                .catch((error) => {
+                console.log("Le post n'a pas pu être récupéré /" + error);
+                });
+            },
     methods: {
         Logout() {
         localStorage.clear();
         this.$router.push("/");
         },
     },
-    mounted() {
-        this.userId = localStorage.getItem("id");
-    },
-}
+};
 
 </script>
 
@@ -63,6 +79,8 @@ export default {
     transition: 0.2s;
     z-index: 9999;
     padding-left: 5px;
+    padding-right: 1px;
+    border-right: 10px solid #f1f1f1;
 }
 .navigation.active{
     width: 250px;
@@ -74,7 +92,7 @@ export default {
     left: 0;
     width: 100%;
     padding-left: 5px;
-    padding-top: 40px;
+    padding-top: 85px;
 }
 .navigation ul li{
     position: relative;
@@ -89,7 +107,7 @@ export default {
     background-color: #2e466e;
     border-radius: 20px;
 }
-.navigation ul li a{
+.navigation ul li a, .name{
     position: relative;
     display: block;
     width: 100%;
@@ -97,6 +115,10 @@ export default {
     text-decoration: none;
     color: #fff;
     font-size: 1.2rem;
+}
+.name{
+    margin-top: 40px;
+    margin-left: 50px;
 }
 
 .navigation ul li a .fas{
@@ -143,5 +165,11 @@ export default {
 .toggle .fa-times,
 .toggle.active .fa-bars{
     display: none;
+}
+
+@media screen and (max-width: 400px) {
+    .navigation {
+        width: 62px;
+    }
 }
 </style>

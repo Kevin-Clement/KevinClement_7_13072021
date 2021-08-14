@@ -15,15 +15,15 @@ export default {
     },
     data() {
         return {
-        token: "",
+        token: localStorage.getItem("token"),
         };
     },
     methods: {
         deleteComment() {
-        let token = localStorage.getItem("token");
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
         axios
             .delete("http://localhost:3001/api/post/" + this.id + "/comment/" + this.idCom, {
-            headers: { Authorization: "Bearer " + token },
+            headers: { Authorization: "Bearer " + this.token },
             })
             .then(() => {
             alert("Votre commentaire a bien été supprimé !");
@@ -32,7 +32,8 @@ export default {
             .catch((error) => {
             console.log({ error });
             });
-        },
+        }
+        }
     },
 };
 </script>

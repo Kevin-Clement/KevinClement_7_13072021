@@ -12,25 +12,21 @@
           <div class="profile-wall">
             <div class="header-profile-wall">
               <h3 class="logo-setting"><i class="fas fa-cog"></i>Paramètres du compte</h3>
-              <button class="deletebtn" type="submit" @click.prevent="deleteProfile">Supprimer mon compte</button>
             </div>
               <router-link :to="`/wall`"><i class="fas fa-arrow-left"></i></router-link>
             <h3 class="username">{{ users.username }}</h3>
-            <!-- <img
-              :src="users.file"
-              :alt="users.file"
-              v-if="users.file != null"
-              />
-            <label for="File">Photo de profil : </label>
-                            <input  @change="updateImg()" type="file" ref="file" name="image" class="form-control-file" id="File" accept=".jpg, .jpeg, .gif, .png"> -->
             <div class="setting">
               <p><u>E-mail</u> : {{ users.email }}</p>
               <p><u>Nom d'utilisateur</u> : {{ users.username }}</p>
               <p><u>Mot de passe</u> : Doit contenir au minimum 8 caractères dont une majuscule,
               et au minimum un caractère numérique et un caractère spécial</p>
             </div>
+            <div class="btn-profile">
                 <button v-on:click="toggleModaleEditPwd" class="btn-update-pwd">Modifier le mot de passe</button>
+                <deleteProfile/>
+              </div>
           </div>
+          <allProfiles/>
           <modaleEditPwd v-bind:reveleEditPwd="reveleEditPwd" v-bind:toggleModaleEditPwd="toggleModaleEditPwd"/>
         </div>
     </div>
@@ -40,20 +36,24 @@
 <script>
 import axios from "axios";
 import navigation from "../components/Nav2.vue";
-import modaleEditPwd from "../views/ModaleEditPwd.vue"
+import modaleEditPwd from "../views/ModaleEditPwd.vue";
+import deleteProfile from "../components/DelProfile.vue";
+import allProfiles from "../views/AllProfile.vue"
 
 export default {
     name: "profile",
     components:{
       navigation,
       modaleEditPwd,
+      deleteProfile,
+      allProfiles,
     },
     data() {
         return {
           reveleEditPwd: false,
-          token:"",
           users: [],
-          userId: "",
+          token: localStorage.getItem("token"),
+          userId: localStorage.getItem("id"),
           email: "",
           username: "",
           file: null,
@@ -62,11 +62,9 @@ export default {
     },
     methods: {
         loadProfile() {
-            let token = localStorage.getItem("token");
-            let userId = localStorage.getItem("id");
             axios
-                .get("http://localhost:3001/api/user/" + userId , {
-                headers: { Authorization: "Bearer " + token },
+                .get("http://localhost:3001/api/user/" + this.userId , {
+                headers: { Authorization: "Bearer " + this.token },
                 })
                 .then((res) => {
                 this.users = res.data;
@@ -76,41 +74,12 @@ export default {
                 console.log("Le post n'a pas pu être récupéré /" + error);
                 });
             },
-        
-        deleteProfile() {
-            let token = localStorage.getItem("token");
-            let userId = localStorage.getItem("id");
-            axios
-                .delete("http://localhost:3001/api/user/" + userId , {
-                headers: { Authorization: "Bearer " + token },
-                })
-                .then(() => {
-                alert("Votre compte a été supprimé !");
-                this.$router.push("/");
-                })
-                .catch((error) => {
-                console.log({ error });
-                });
-            },
         toggleModaleEditPwd: function() {
           this.reveleEditPwd = !this.reveleEditPwd
         },
-        // updateImg() {
-        //   let userId = localStorage.getItem("id");
-        //   this.file = this.$refs.file.files[0];
-        //   axios
-        //     .get("http://localhost:3001/api/user/" + userId, { headers: { "Authorization":"Bearer " + localStorage.getItem("token")}})
-        //         .then(()=> {
-        //             this.file = null
-        //         })
-        //         .catch((error)=>{
-        //             console.log(error);
-        //         })
-        // }
         },
         mounted() {
             this.loadProfile();
-            this.userId = localStorage.getItem("id");
         },
     
 }
@@ -175,7 +144,7 @@ hr {
   margin-bottom: 10px;
 }
 .setting{
-  max-width: 800px;
+  width: 77%;
 }
 h3{
   margin: 0 60px;
@@ -208,35 +177,43 @@ p{
 .btn-update-pwd:hover{
   box-shadow:inset 0px 0px 8px 2px #b3b3b3;
 }
-.deletebtn {
-  background-color: #182438;
-  box-shadow:inset 0px 0px 8px 2px #375383;
-    border-radius:17px;
-    border: 1px solid #dadada;
-    display:inline-block;
-    cursor:pointer;
-    color: #f1f1f1;
-    font-family: 'roboto', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 10px 18px;
-    text-decoration: none;
-    transition: .2s ease-in-out;
-}
-.deletebtn:hover{
-  box-shadow:inset 0px 0px 8px 2px #b3b3b3;
-}
-.error {
-  font-size: 13px;
-  background-color: rgb(231, 185, 185);
-  color: rgb(53, 21, 21);
-  margin-top: 30px;
-  padding: 10px;
+.btn-profile{
+  display: flex;
+  align-items: center;
 }
 
 @media screen and (max-width:550px) {
   .profile-right{
     border-left: 0px;
   }
+}
+
+@media screen and (max-width:450px) {
+  .whiteLogo{
+    width: 200px;
+    height: 45px;
+    margin: 20px 35px;
+}
+.profile-wall{
+    margin: 20px;
+}
+h2{
+    font-size: 1.7rem;
+}
+h3{
+  margin: 0;
+  font-size: 1.3rem;
+}
+.fa-arrow-left{
+  display: none;
+}
+.btn-profile{
+  display: inherit;
+  align-items: inherit;
+}
+.btn-update-pwd{
+  font-size: inherit;
+}
+
 }
 </style>

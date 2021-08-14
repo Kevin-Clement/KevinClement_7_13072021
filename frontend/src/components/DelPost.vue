@@ -14,15 +14,15 @@ export default {
     },
     data() {
         return {
-        token: "",
+        token: localStorage.getItem("token"),
         };
     },
     methods: {
         deletePost() {
-        let token = localStorage.getItem("token");
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce message ?')) {
         axios
             .delete("http://localhost:3001/api/post/" + this.id, {
-            headers: { Authorization: "Bearer " + token },
+            headers: { Authorization: "Bearer " + this.token },
             })
             .then(() => {
             alert("Votre message a bien été supprimé !");
@@ -31,7 +31,8 @@ export default {
             .catch((error) => {
             console.log({ error });
             });
-        },
+        }
+        }
     },
 };
 </script>

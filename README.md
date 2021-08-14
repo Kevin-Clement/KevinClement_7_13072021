@@ -18,7 +18,7 @@ Exemple: App running at:
 
 Local: http://localhost:8080/
 
-Network: http://192.168.1.64:8080/)
+Network: http://192.168.1.35:8080/)
 
 Installation de la base de données Entrez: - `npm i sequelize - sequelize init`
 

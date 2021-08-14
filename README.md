@@ -13,13 +13,11 @@ Clônez le repo sur lequel vous vous trouvez.
 À la racine du dossier frontend => `npm install`
 
 Puis `npm run serve`
-
-Vous verrez ensuite 2 urls: copier et coller l'url Network dans votre navigateur web.
-
-(Exemple: App running at:
+Exemple: App running at:
 
 Local: http://localhost:8080/
 Network: http://192.168.1.64:8080/)
+
 Installation de la base de données Entrez: - `npm i sequelize - sequelize init`
 
 Dans le dossier backend modifer le username (ou root) et le mot de passe dans config/config.json

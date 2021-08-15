@@ -11,18 +11,6 @@ const routes = [
     component: Home
   },
   {
-    path: '/signup',
-    name: 'signup',
-
-    component: () => import(/* webpackChunkName: "about" */ '../views/Signup.vue')
-  },
-  {
-    path:'/login',
-    name:'login',
-
-    component: () => import('../views/Login.vue')
-  },
-  {
     path: "/wall",
     name: "wall",
     component: () =>
@@ -50,20 +38,6 @@ const routes = [
       }
     },
   },
-  // {
-  // path: "/allProfile",
-  //   name: "allProfile",
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/allProfile.vue"),
-  //   beforeEnter: (to, from, next) => {
-  //     let isAdmin = localStorage.getItem("isAdmin")
-  //     if (isAdmin = true) {
-  //       next();
-  //     } else {
-  //       next({ name: "login" });
-  //     }
-  //   },
-  // }
 ]
 
 const router = new VueRouter({

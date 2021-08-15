@@ -15,10 +15,10 @@
                     </router-link>
                 </li>
                 <li class="list">
-                    <a to="/login" v-on:click="Logout()">
+                    <router-link to="/" v-on:click="Logout()">
                         <i class="fas fa-sign-out-alt"></i>
                         <span v-if="menuToggle" class="title">Deconnexion</span>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         <div class="toggle" :class="{ active: isSelected }" @click="isSelected = !isSelected">

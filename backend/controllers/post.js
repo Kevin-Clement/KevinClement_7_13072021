@@ -32,8 +32,7 @@ exports.createPost = (req, res) => {
                             res.status(201).json(newPost)
                         })
                         .catch(err => console.log(err) || res.status(404).json({
-                            error: 'Utilisateur non trouvé'
-
+                            error: 'Message trop long'
                         }));
                 }
             })

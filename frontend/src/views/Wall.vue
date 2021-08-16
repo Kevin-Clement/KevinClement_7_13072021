@@ -74,7 +74,7 @@ export default {
     width: 250px;
     height: 57px;
     margin: 10px 0px;
-    margin-right: 65px;
+    margin-right: 75px;
 }
 h2{
   font-family: 'roboto', sans-serif;
@@ -82,7 +82,7 @@ h2{
   color: #f1f1f1;
   margin-top: 10px;
   margin-bottom: 30px;
-  margin-right: 50px;
+  margin-right: 70px;
 }
 hr {
     border: none;
@@ -101,7 +101,7 @@ hr {
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 425px) {
   .whiteLogo{
     width: 180px;
     height: 38px;

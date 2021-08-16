@@ -78,6 +78,9 @@ export default {
 .post h2{
     margin-bottom: 20px;
 }
+.fa-paper-plane{
+    margin-left: 10px;
+}
 form {
     width: 65%;
     padding: 10px;
@@ -100,6 +103,10 @@ textarea {
     margin-bottom: 10px;
     height: 100px;
     border-radius: 20px;
+    transition: 0.2s ease-in-out;
+}
+textarea:hover{
+    background-color: #4a6eac;
 }
 textarea::placeholder {
     padding: 3px;
@@ -163,7 +170,7 @@ input {
         height: 20px;
     }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 425px) {
     form{
         width: 80%;
         right: 9%;

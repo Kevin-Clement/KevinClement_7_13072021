@@ -80,6 +80,7 @@ form{
 #comment{
     display: flex;
     justify-content: center;
+    outline: none;
     color: #fff;
     background-color: #6481b3;
     border-radius: 20px;
@@ -89,6 +90,10 @@ form{
     margin-right: 25px;
     margin-top: 15px;
     margin-bottom: 5px;
+    transition: 0.2s ease-in-out;
+}
+#comment:hover{
+    background-color: #6b8abe;
 }
 button {
     width: 20%;
@@ -105,15 +110,12 @@ button {
     cursor: pointer;
     position: relative;
     left: 70%;
+    transition: 0.2s ease-in-out;
 }
-.error {
-    font-size: 11px;
-    background-color: rgb(231, 185, 185);
-    color: rgb(53, 21, 21);
-    padding: 10px;
+button:hover {
+    background-color: rgb(212, 212, 212);
 }
-
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 425px) {
     #comment{
         width: 65%;
     }

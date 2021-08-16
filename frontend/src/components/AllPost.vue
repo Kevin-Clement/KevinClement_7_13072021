@@ -132,7 +132,7 @@ a {
   font-size: 18px;
 }
 .content-post{
-  background-color: #406097;
+  background-color: #4668a2;
   border-radius: 20px;
   width: 100%;
   padding: 20px;
@@ -163,7 +163,7 @@ img {
   margin: 30px;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 425px) {
   .allPost{
     right: 42px;
   }

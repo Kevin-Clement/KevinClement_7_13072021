@@ -1,6 +1,7 @@
 <template>
 <div>
-  <button class="btn-commentToggle" @click="commentToggle = !commentToggle">Commentaire</button>
+  <button class="btn-commentToggle" v-if="this.allComments.length > 0" @click="commentToggle = !commentToggle">Commentaire</button>
+    <span class="quantityCom" v-if="this.allComments.length > 0">{{ this.allComments.length }}</span>
     <div id="oneComment" :class="{ active: commentToggle }">
         <div id="comment-card" v-for="comment in allComments" :key="comment.id">
           <div class="btn-deleteCom" v-if="comment.userId == userId || users.isAdmin == 1">
@@ -63,6 +64,7 @@ export default {
         })
         .then((res) => {
           this.allComments = res.data;
+          console.log(this.allComments.length);
         })
         .catch((error) => {
           console.log({ error });
@@ -98,6 +100,10 @@ export default {
   cursor: pointer;
   margin-left: 25px;
   margin-bottom: 20px;
+  transition: 0.2s ease-in-out;
+}
+.btn-commentToggle:hover{
+  background-color: rgb(212, 212, 212);
 }
 .btn-deleteCom{
   display: flex;
@@ -137,11 +143,24 @@ hr {
   padding-right: 30px;
   margin-bottom: 15px;
 }
-.commentaire {
-  margin: 15px;
+
+
+.quantityCom{
+  display: inline-block;
+	position: relative;
+	text-align: center;
+	font-weight: bold;
+	top: 19px;
+	right: 9px;
+	font-size: 0.7em;
+	background-color: rgb(208 33 33);
+	color: white;
+	border-radius: 50%;
+	height: 14px;
+	width: 14px;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 425px) {
   .btn-commentToggle{
     left: 64%;
 }

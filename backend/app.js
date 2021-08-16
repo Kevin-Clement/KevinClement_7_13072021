@@ -1,7 +1,7 @@
 const express = require('express');
 const helmet = require("helmet");
 const path = require('path');
-// const rateLimit = require("express-rate-limit");
+const rateLimit = require("express-rate-limit");
 
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
@@ -20,12 +20,13 @@ app.use((req, res, next) => {
     next();
 });
 
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000, // 15 minutes 
-//     max: 100 // limite chaque IP à 100 requêtes par windowMs
-// });
+const limiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes 
+    max: 300, // limite chaque IP à 300 requêtes par windowMs
+    message: " Trop de tentatives échouées, réessayez dans 5 minutes",
+});
 
-// app.use(limiter);
+app.use(limiter);
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
